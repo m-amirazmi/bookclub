@@ -1,11 +1,13 @@
 import Fastify from "fastify";
 import authorRoutes from "./modules/author/author.route";
+import { dbPlugin } from "./plugins/db.plugin";
 
 const server = Fastify({ logger: { transport: { target: "pino-pretty" } } });
 
 server.get("/health", async () => ({ status: "ok" }));
 
 async function main() {
+  server.register(dbPlugin);
   server.register(authorRoutes, { prefix: "/api/authors" });
 
   try {
