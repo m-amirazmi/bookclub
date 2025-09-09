@@ -55,10 +55,9 @@ export class AuthorController {
   ) {
     try {
       const author = await this.authorService.createAuthor(request.body);
-
-      return reply.code(201).send({
-        success: true,
+      return reply.success({
         data: author,
+        statusCode: 201,
       });
     } catch (error) {
       if (

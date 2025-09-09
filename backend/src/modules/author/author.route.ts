@@ -17,10 +17,10 @@ const validateParams = async (
 ) => {
   const result = authorParamsSchema.safeParse(request.params);
   if (!result.success) {
-    return reply.code(400).send({
-      success: false,
-      error: "Invalid parameters",
+    return reply.error({
+      errorMessage: "Invalid parameters",
       details: result.error.errors,
+      statusCode: 400,
     });
   }
 };
@@ -31,10 +31,10 @@ const validateCreateBody = async (
 ) => {
   const result = createAuthorSchema.safeParse(request.body);
   if (!result.success) {
-    return reply.code(400).send({
-      success: false,
-      error: "Validation failed",
+    return reply.error({
+      errorMessage: "Validation failed",
       details: result.error.errors,
+      statusCode: 400,
     });
   }
   request.body = result.data;
@@ -46,18 +46,18 @@ const validateUpdate = async (
 ) => {
   const paramsResult = authorParamsSchema.safeParse(request.params);
   if (!paramsResult.success) {
-    return reply.code(400).send({
-      success: false,
-      error: "Invalid parameters",
+    return reply.error({
+      errorMessage: "Invalid parameters",
       details: paramsResult.error.errors,
+      statusCode: 400,
     });
   }
   const bodyResult = updateAuthorSchema.safeParse(request.body);
   if (!bodyResult.success) {
-    return reply.code(400).send({
-      success: false,
-      error: "Validation failed",
+    return reply.error({
+      errorMessage: "Validation failed",
       details: bodyResult.error.errors,
+      statusCode: 400,
     });
   }
   request.body = bodyResult.data;
