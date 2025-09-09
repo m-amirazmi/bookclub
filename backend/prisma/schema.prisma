@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Author {
+  id        Int      @id @default(autoincrement())
+  name      String
+  books     Book[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Book {
+  id              Int               @id @default(autoincrement())
+  title           String
+  author          Author            @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId        Int
+  publishedAt     DateTime
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  genre           BookGenre[]
+  ReadingProgress ReadingProgress[]
+}
+
+model BookGenre {
+  book    Book  @relation(fields: [bookId], references: [id])
+  bookId  Int
+  genre   Genre @relation(fields: [genreId], references: [id])
+  genreId Int
+
+  @@id([bookId, genreId]) // Avoids duplicate entries
+}
+
+model Genre {
+  id        Int         @id @default(autoincrement())
+  name      String      @unique
+  books     BookGenre[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+enum ReadingStatus {
+  NOT_STARTED       @map("not_started")
+  CURRENTLY_READING @map("currently_reading")
+  COMPLETED         @map("completed")
+}
+
+model ReadingProgress {
+  id        Int           @id @default(autoincrement())
+  book      Book          @relation(fields: [bookId], references: [id])
+  bookId    Int
+  progress  Int           @default(0) // 0, 5, 10, ..., 100
+  status    ReadingStatus @default(NOT_STARTED)
+  startedAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
