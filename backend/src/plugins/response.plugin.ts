@@ -1,6 +1,7 @@
 import { FastifyReply } from "fastify";
 import fp from "fastify-plugin";
 import { ZodIssue } from "zod";
+import { CommonErrorCode } from "../consts/error-messages";
 import { HttpStatus } from "../consts/http-status";
 
 type SuccessResponseParamType<T> = {
@@ -18,13 +19,15 @@ export interface SuccessResponse<T> {
 export type ErrorResponseParamType = {
   statusCode?: HttpStatus;
   errorMessage: string;
+  errorCode?: string;
   details?: ZodIssue[];
 };
 
 export interface ErrorResponse {
   success: false;
-  errorMessage: string;
   statusCode?: HttpStatus;
+  errorMessage: string;
+  errorCode: string;
   details?: any;
 }
 
@@ -45,10 +48,13 @@ export const responsePlugin = fp(async (server) => {
     T
   >(this: FastifyReply, options: ErrorResponseParamType) {
     const { errorMessage, statusCode = 400, details } = options;
+    let errorCode = options.errorCode;
+    if (!errorCode) errorCode = CommonErrorCode.INTERNAL_SERVER_ERROR;
     const response: ErrorResponse = {
-      errorMessage,
       success: false,
-      statusCode: statusCode,
+      errorMessage,
+      statusCode,
+      errorCode,
       ...(details && { details }),
     };
     return this.code(statusCode).send(response);

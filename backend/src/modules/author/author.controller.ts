@@ -1,10 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import {
-  AuthorErrorMessages,
-  CommonErrorMessages,
-} from "../../consts/error-messages";
 import { HttpStatus } from "../../consts/http-status";
-import { ErrorResponseParamType } from "../../plugins/response.plugin";
+import { mapErrorToResponse } from "../../utils/error-mapper";
 import { LoggerHelper } from "../../utils/logger-helper";
 import { AuthorParams, CreateAuthor, UpdateAuthor } from "./author.schema";
 import { AuthorService } from "./author.service";
@@ -25,10 +21,7 @@ export class AuthorController {
       return reply.success({ data: authors });
     } catch (error) {
       log.error(error);
-      return reply.error({
-        errorMessage: CommonErrorMessages.INTERNAL_SERVER_ERROR,
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-      });
+      return reply.error(mapErrorToResponse(error));
     }
   }
 
@@ -45,18 +38,7 @@ export class AuthorController {
       return reply.success({ data: author });
     } catch (error) {
       log.error(error);
-      const errorObj: ErrorResponseParamType = {
-        errorMessage: CommonErrorMessages.INTERNAL_SERVER_ERROR,
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-      };
-      if (
-        error instanceof Error &&
-        error.message === AuthorErrorMessages.AUTHOR_NOT_FOUND
-      ) {
-        errorObj.errorMessage = error.message;
-        errorObj.statusCode = HttpStatus.NOT_FOUND;
-      }
-      return reply.error(errorObj);
+      return reply.error(mapErrorToResponse(error));
     }
   }
 
@@ -75,18 +57,7 @@ export class AuthorController {
       });
     } catch (error) {
       log.error(error);
-      const errorObj: ErrorResponseParamType = {
-        errorMessage: CommonErrorMessages.INTERNAL_SERVER_ERROR,
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-      };
-      if (
-        error instanceof Error &&
-        error.message === AuthorErrorMessages.AUTHOR_ALREADY_EXISTS
-      ) {
-        errorObj.errorMessage = error.message;
-        errorObj.statusCode = HttpStatus.CONFLICT;
-      }
-      return reply.error(errorObj);
+      return reply.error(mapErrorToResponse(error));
     }
   }
 
@@ -106,25 +77,7 @@ export class AuthorController {
       return reply.success({ data: author });
     } catch (error) {
       log.error(error);
-      const errorObj: ErrorResponseParamType = {
-        errorMessage: CommonErrorMessages.INTERNAL_SERVER_ERROR,
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-      };
-      if (
-        error instanceof Error &&
-        error.message === AuthorErrorMessages.AUTHOR_NOT_FOUND
-      ) {
-        errorObj.errorMessage = error.message;
-        errorObj.statusCode = HttpStatus.NOT_FOUND;
-      }
-      if (
-        error instanceof Error &&
-        error.message === AuthorErrorMessages.AUTHOR_ALREADY_EXISTS
-      ) {
-        errorObj.errorMessage = error.message;
-        errorObj.statusCode = HttpStatus.CONFLICT;
-      }
-      return reply.error(errorObj);
+      return reply.error(mapErrorToResponse(error));
     }
   }
 
@@ -141,11 +94,7 @@ export class AuthorController {
       return reply.success({ data: null, statusCode: HttpStatus.NO_CONTENT });
     } catch (error) {
       log.error(error);
-      const errorObj: ErrorResponseParamType = {
-        errorMessage: CommonErrorMessages.INTERNAL_SERVER_ERROR,
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-      };
-      return reply.error(errorObj);
+      return reply.error(mapErrorToResponse(error));
     }
   }
 }

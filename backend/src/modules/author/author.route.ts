@@ -1,5 +1,4 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { CommonErrorMessages } from "../../consts/error-messages";
 import { LoggerHelper } from "../../utils/logger-helper";
 import { AuthorController } from "./author.controller";
 import { AuthorRepository } from "./author.repository";
@@ -11,6 +10,10 @@ import {
   updateAuthorSchema,
 } from "./author.schema";
 import { AuthorService } from "./author.service";
+import {
+  CommonErrorCode,
+  CommonErrorMessage,
+} from "../../consts/error-messages";
 
 const logger = new LoggerHelper("AuthorRoute");
 
@@ -23,9 +26,10 @@ const validateParams = async (
   log.info("Validating parameters");
   const result = authorParamsSchema.safeParse(request.params);
   if (!result.success) {
-    log.error(CommonErrorMessages.INVALID_PARAMETERS);
+    log.error(CommonErrorCode.INVALID_PARAMETERS);
     return reply.error({
-      errorMessage: CommonErrorMessages.INVALID_PARAMETERS,
+      errorMessage: CommonErrorMessage[CommonErrorCode.INVALID_PARAMETERS],
+      errorCode: CommonErrorCode.INVALID_PARAMETERS,
       details: result.error.errors,
     });
   }
@@ -39,9 +43,10 @@ const validateCreateBody = async (
   log.info("Validating body");
   const result = createAuthorSchema.safeParse(request.body);
   if (!result.success) {
-    log.error(CommonErrorMessages.VALIDATION_FAILED);
+    log.error(CommonErrorCode.VALIDATION_FAILED);
     return reply.error({
-      errorMessage: CommonErrorMessages.VALIDATION_FAILED,
+      errorMessage: CommonErrorMessage[CommonErrorCode.VALIDATION_FAILED],
+      errorCode: CommonErrorCode.VALIDATION_FAILED,
       details: result.error.errors,
     });
   }
@@ -56,18 +61,20 @@ const validateUpdate = async (
   log.info("Validating parameters");
   const paramsResult = authorParamsSchema.safeParse(request.params);
   if (!paramsResult.success) {
-    log.error(CommonErrorMessages.INVALID_PARAMETERS);
+    log.error(CommonErrorCode.INVALID_PARAMETERS);
     return reply.error({
-      errorMessage: CommonErrorMessages.INVALID_PARAMETERS,
+      errorMessage: CommonErrorMessage[CommonErrorCode.INVALID_PARAMETERS],
+      errorCode: CommonErrorCode.INVALID_PARAMETERS,
       details: paramsResult.error.errors,
     });
   }
   log.info("Validating body");
   const bodyResult = updateAuthorSchema.safeParse(request.body);
   if (!bodyResult.success) {
-    log.error(CommonErrorMessages.VALIDATION_FAILED);
+    log.error(CommonErrorCode.VALIDATION_FAILED);
     return reply.error({
-      errorMessage: CommonErrorMessages.VALIDATION_FAILED,
+      errorMessage: CommonErrorMessage[CommonErrorCode.VALIDATION_FAILED],
+      errorCode: CommonErrorCode.VALIDATION_FAILED,
       details: bodyResult.error.errors,
     });
   }
