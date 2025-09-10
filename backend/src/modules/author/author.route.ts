@@ -1,7 +1,8 @@
-import type { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
-import { AuthorRepository } from "./author.repository";
-import { AuthorService } from "./author.service";
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { CommonErrorMessages } from "../../consts/error-messages";
+import { LoggerHelper } from "../../utils/logger-helper";
 import { AuthorController } from "./author.controller";
+import { AuthorRepository } from "./author.repository";
 import {
   authorParamsSchema,
   CreateAuthor,
@@ -9,18 +10,23 @@ import {
   UpdateAuthor,
   updateAuthorSchema,
 } from "./author.schema";
+import { AuthorService } from "./author.service";
+
+const logger = new LoggerHelper("AuthorRoute");
 
 // Reusable validation preHandlers
 const validateParams = async (
   request: FastifyRequest<{ Params: { id: string } }>,
   reply: FastifyReply
 ) => {
+  const log = logger.log(request, validateParams.name);
+  log.info("Validating parameters");
   const result = authorParamsSchema.safeParse(request.params);
   if (!result.success) {
+    log.error(CommonErrorMessages.INVALID_PARAMETERS);
     return reply.error({
-      errorMessage: "Invalid parameters",
+      errorMessage: CommonErrorMessages.INVALID_PARAMETERS,
       details: result.error.errors,
-      statusCode: 400,
     });
   }
 };
@@ -29,12 +35,14 @@ const validateCreateBody = async (
   request: FastifyRequest<{ Body: CreateAuthor }>,
   reply: FastifyReply
 ) => {
+  const log = logger.log(request, validateCreateBody.name);
+  log.info("Validating body");
   const result = createAuthorSchema.safeParse(request.body);
   if (!result.success) {
+    log.error(CommonErrorMessages.VALIDATION_FAILED);
     return reply.error({
-      errorMessage: "Validation failed",
+      errorMessage: CommonErrorMessages.VALIDATION_FAILED,
       details: result.error.errors,
-      statusCode: 400,
     });
   }
   request.body = result.data;
@@ -44,20 +52,23 @@ const validateUpdate = async (
   request: FastifyRequest<{ Body: UpdateAuthor; Params: { id: string } }>,
   reply: FastifyReply
 ) => {
+  const log = logger.log(request, validateCreateBody.name);
+  log.info("Validating parameters");
   const paramsResult = authorParamsSchema.safeParse(request.params);
   if (!paramsResult.success) {
+    log.error(CommonErrorMessages.INVALID_PARAMETERS);
     return reply.error({
-      errorMessage: "Invalid parameters",
+      errorMessage: CommonErrorMessages.INVALID_PARAMETERS,
       details: paramsResult.error.errors,
-      statusCode: 400,
     });
   }
+  log.info("Validating body");
   const bodyResult = updateAuthorSchema.safeParse(request.body);
   if (!bodyResult.success) {
+    log.error(CommonErrorMessages.VALIDATION_FAILED);
     return reply.error({
-      errorMessage: "Validation failed",
+      errorMessage: CommonErrorMessages.VALIDATION_FAILED,
       details: bodyResult.error.errors,
-      statusCode: 400,
     });
   }
   request.body = bodyResult.data;

@@ -17,42 +17,18 @@ export class AuthorRepository {
   }
 
   async update(id: number, data: UpdateAuthor): Promise<Author | null> {
-    try {
-      return await this.db.author.update({
-        where: { id },
-        data: {
-          ...(data.name && { name: data.name }),
-          ...(data.bio && { bio: data.bio }),
-          updatedAt: new Date(),
-        },
-      });
-    } catch (error) {
-      if (
-        typeof error === "object" &&
-        error !== null &&
-        "code" in error &&
-        (error as any).code === "P2025"
-      ) {
-        return null;
-      }
-      throw error;
-    }
+    return await this.db.author.update({
+      where: { id },
+      data: {
+        ...(data.name && { name: data.name }),
+        ...(data.bio !== undefined && { bio: data.bio }),
+        updatedAt: new Date(),
+      },
+    });
   }
 
   async delete(id: number): Promise<Author | null> {
-    try {
-      return await this.db.author.delete({ where: { id } });
-    } catch (error) {
-      if (
-        typeof error === "object" &&
-        error !== null &&
-        "code" in error &&
-        (error as any).code === "P2025"
-      ) {
-        return null;
-      }
-      throw error;
-    }
+    return await this.db.author.delete({ where: { id } });
   }
 
   async findByName(name: string): Promise<Author | null> {

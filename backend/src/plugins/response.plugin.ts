@@ -1,9 +1,10 @@
 import { FastifyReply } from "fastify";
 import fp from "fastify-plugin";
 import { ZodIssue } from "zod";
+import { HttpStatus } from "../consts/http-status";
 
 type SuccessResponseParamType<T> = {
-  statusCode: number;
+  statusCode?: HttpStatus;
   data: T;
   message?: string;
 };
@@ -14,8 +15,8 @@ export interface SuccessResponse<T> {
   message?: string;
 }
 
-type ErrorResponseParamType = {
-  statusCode: number;
+export type ErrorResponseParamType = {
+  statusCode?: HttpStatus;
   errorMessage: string;
   details?: ZodIssue[];
 };
@@ -23,7 +24,7 @@ type ErrorResponseParamType = {
 export interface ErrorResponse {
   success: false;
   errorMessage: string;
-  statusCode?: number;
+  statusCode?: HttpStatus;
   details?: any;
 }
 
@@ -31,24 +32,26 @@ export const responsePlugin = fp(async (server) => {
   server.decorateReply("success", function <
     T
   >(this: FastifyReply, options: SuccessResponseParamType<T>) {
+    const { data, statusCode = 200, message } = options;
     const response: SuccessResponse<T> = {
-      data: options.data,
+      data,
       success: true,
-      ...(options.message && { message: options.message }),
+      ...(message && { message }),
     };
-    return this.code(options.statusCode).send(response);
+    return this.code(statusCode).send(response);
   });
 
   server.decorateReply("error", function <
     T
   >(this: FastifyReply, options: ErrorResponseParamType) {
+    const { errorMessage, statusCode = 400, details } = options;
     const response: ErrorResponse = {
-      errorMessage: options.errorMessage,
+      errorMessage,
       success: false,
-      statusCode: options.statusCode,
-      ...(options.details && { details: options.details }),
+      statusCode: statusCode,
+      ...(details && { details }),
     };
-    return this.code(options.statusCode).send(response);
+    return this.code(statusCode).send(response);
   });
 });
 

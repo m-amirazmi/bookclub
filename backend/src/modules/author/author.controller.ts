@@ -1,22 +1,33 @@
-import { FastifyRequest, FastifyReply } from "fastify";
+import { FastifyReply, FastifyRequest } from "fastify";
+import {
+  AuthorErrorMessages,
+  CommonErrorMessages,
+} from "../../consts/error-messages";
+import { HttpStatus } from "../../consts/http-status";
+import { ErrorResponseParamType } from "../../plugins/response.plugin";
+import { LoggerHelper } from "../../utils/logger-helper";
 import { AuthorParams, CreateAuthor, UpdateAuthor } from "./author.schema";
 import { AuthorService } from "./author.service";
 
 export class AuthorController {
-  constructor(private authorService: AuthorService) {}
+  private readonly logger: LoggerHelper;
+
+  constructor(private authorService: AuthorService) {
+    this.logger = new LoggerHelper(AuthorController.name);
+  }
 
   async getAll(request: FastifyRequest, reply: FastifyReply) {
+    const log = this.logger.log(request, this.getAll.name);
+    log.info("Fetching all authors");
+
     try {
       const authors = await this.authorService.getAllAuthors();
-      return reply.code(200).send({
-        success: true,
-        data: authors,
-      });
+      return reply.success({ data: authors });
     } catch (error) {
-      request.log.error(error);
-      return reply.code(500).send({
-        success: false,
-        error: "Internal Server Error",
+      log.error(error);
+      return reply.error({
+        errorMessage: CommonErrorMessages.INTERNAL_SERVER_ERROR,
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
       });
     }
   }
@@ -25,27 +36,27 @@ export class AuthorController {
     request: FastifyRequest<{ Params: AuthorParams }>,
     reply: FastifyReply
   ) {
+    const id = parseInt(request.params.id);
+    const log = this.logger.log(request, this.getById.name);
+    log.info("Fetching author by ID: " + id);
+
     try {
-      const id = parseInt(request.params.id);
       const author = await this.authorService.getAuthorById(id);
-
-      return reply.code(200).send({
-        success: true,
-        data: author,
-      });
+      return reply.success({ data: author });
     } catch (error) {
-      if (error instanceof Error && error.message === "Author not found") {
-        return reply.code(404).send({
-          success: false,
-          error: "Author not found",
-        });
+      log.error(error);
+      const errorObj: ErrorResponseParamType = {
+        errorMessage: CommonErrorMessages.INTERNAL_SERVER_ERROR,
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+      };
+      if (
+        error instanceof Error &&
+        error.message === AuthorErrorMessages.AUTHOR_NOT_FOUND
+      ) {
+        errorObj.errorMessage = error.message;
+        errorObj.statusCode = HttpStatus.NOT_FOUND;
       }
-
-      request.log.error(error);
-      return reply.code(500).send({
-        success: false,
-        error: "Internal Server Error",
-      });
+      return reply.error(errorObj);
     }
   }
 
@@ -53,28 +64,29 @@ export class AuthorController {
     request: FastifyRequest<{ Body: CreateAuthor }>,
     reply: FastifyReply
   ) {
+    const log = this.logger.log(request, this.create.name);
+    log.info("Creating new author");
+
     try {
       const author = await this.authorService.createAuthor(request.body);
       return reply.success({
         data: author,
-        statusCode: 201,
+        statusCode: HttpStatus.CREATED,
       });
     } catch (error) {
+      log.error(error);
+      const errorObj: ErrorResponseParamType = {
+        errorMessage: CommonErrorMessages.INTERNAL_SERVER_ERROR,
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+      };
       if (
         error instanceof Error &&
-        error.message === "Author with this name already exists"
+        error.message === AuthorErrorMessages.AUTHOR_ALREADY_EXISTS
       ) {
-        return reply.code(409).send({
-          success: false,
-          error: error.message,
-        });
+        errorObj.errorMessage = error.message;
+        errorObj.statusCode = HttpStatus.CONFLICT;
       }
-
-      request.log.error(error);
-      return reply.code(400).send({
-        success: false,
-        error: "Bad Request",
-      });
+      return reply.error(errorObj);
     }
   }
 
@@ -85,37 +97,34 @@ export class AuthorController {
     }>,
     reply: FastifyReply
   ) {
+    const id = parseInt(request.params.id);
+    const log = this.logger.log(request, this.update.name);
+    log.info("Updating author by ID: " + id);
+
     try {
-      const id = parseInt(request.params.id);
       const author = await this.authorService.updateAuthor(id, request.body);
-
-      return reply.code(200).send({
-        success: true,
-        data: author,
-      });
+      return reply.success({ data: author });
     } catch (error) {
-      if (error instanceof Error && error.message === "Author not found") {
-        return reply.code(404).send({
-          success: false,
-          error: "Author not found",
-        });
-      }
-
+      log.error(error);
+      const errorObj: ErrorResponseParamType = {
+        errorMessage: CommonErrorMessages.INTERNAL_SERVER_ERROR,
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+      };
       if (
         error instanceof Error &&
-        error.message === "Author with this name already exists"
+        error.message === AuthorErrorMessages.AUTHOR_NOT_FOUND
       ) {
-        return reply.code(409).send({
-          success: false,
-          error: error.message,
-        });
+        errorObj.errorMessage = error.message;
+        errorObj.statusCode = HttpStatus.NOT_FOUND;
       }
-
-      request.log.error(error);
-      return reply.code(400).send({
-        success: false,
-        error: "Bad Request",
-      });
+      if (
+        error instanceof Error &&
+        error.message === AuthorErrorMessages.AUTHOR_ALREADY_EXISTS
+      ) {
+        errorObj.errorMessage = error.message;
+        errorObj.statusCode = HttpStatus.CONFLICT;
+      }
+      return reply.error(errorObj);
     }
   }
 
@@ -123,24 +132,20 @@ export class AuthorController {
     request: FastifyRequest<{ Params: AuthorParams }>,
     reply: FastifyReply
   ) {
+    const id = parseInt(request.params.id);
+    const log = this.logger.log(request, this.delete.name);
+    log.info("Deleting author by ID: " + id);
+
     try {
-      const id = parseInt(request.params.id);
       await this.authorService.deleteAuthor(id);
-
-      return reply.code(204).send();
+      return reply.success({ data: null, statusCode: HttpStatus.NO_CONTENT });
     } catch (error) {
-      if (error instanceof Error && error.message === "Author not found") {
-        return reply.code(404).send({
-          success: false,
-          error: "Author not found",
-        });
-      }
-
-      request.log.error(error);
-      return reply.code(500).send({
-        success: false,
-        error: "Internal Server Error",
-      });
+      log.error(error);
+      const errorObj: ErrorResponseParamType = {
+        errorMessage: CommonErrorMessages.INTERNAL_SERVER_ERROR,
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+      };
+      return reply.error(errorObj);
     }
   }
 }
