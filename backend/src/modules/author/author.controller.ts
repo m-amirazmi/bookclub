@@ -29,7 +29,7 @@ export class AuthorController {
     request: FastifyRequest<{ Params: AuthorParams }>,
     reply: FastifyReply
   ) {
-    const id = parseInt(request.params.id);
+    const { id } = request.params;
     const log = this.logger.log(request, this.getById.name);
     log.info("Fetching author by ID: " + id);
 
@@ -68,7 +68,7 @@ export class AuthorController {
     }>,
     reply: FastifyReply
   ) {
-    const id = parseInt(request.params.id);
+    const { id } = request.params;
     const log = this.logger.log(request, this.update.name);
     log.info("Updating author by ID: " + id);
 
@@ -85,7 +85,7 @@ export class AuthorController {
     request: FastifyRequest<{ Params: AuthorParams }>,
     reply: FastifyReply
   ) {
-    const id = parseInt(request.params.id);
+    const { id } = request.params;
     const log = this.logger.log(request, this.delete.name);
     log.info("Deleting author by ID: " + id);
 

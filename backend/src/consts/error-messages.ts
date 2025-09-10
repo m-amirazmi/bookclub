@@ -1,3 +1,8 @@
+export enum CommonSchemaErrorMessage {
+  INVALID_ID = "Invalid ID",
+  INVALID_YEAR = "Invalid year",
+}
+
 export enum CommonErrorCode {
   INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR",
   INVALID_PARAMETERS = "INVALID_PARAMETERS",
@@ -9,9 +14,10 @@ export const CommonErrorMessage = {
   [CommonErrorCode.VALIDATION_FAILED]: "Validation failed",
 } as const;
 
-export enum CommonSchemaErrorMessage {
-  INVALID_ID = "Invalid ID",
-  INVALID_YEAR = "Invalid year",
+export enum AuthorSchemaErrorMessage {
+  NAME_REQUIRED = "Name is required",
+  NAME_TOO_LONG = "Name too long",
+  BIO_TOO_LONG = "Bio too long",
 }
 
 export enum AuthorErrorCode {
@@ -24,16 +30,20 @@ export const AuthorErrorMessage = {
   [AuthorErrorCode.ALREADY_EXISTS]: "Author with this name already exists",
 } as const;
 
-export enum AuthorSchemaErrorMessage {
-  NAME_REQUIRED = "Name is required",
-  NAME_TOO_LONG = "Name too long",
-  BIO_TOO_LONG = "Bio too long",
-}
-
 export enum GenreSchemaErrorMessage {
   NAME_REQUIRED = "Name is required",
   NAME_TOO_LONG = "Name too long",
 }
+
+export enum GenreErrorCode {
+  NOT_FOUND = "GENRE_NOT_FOUND",
+  ALREADY_EXISTS = "GENRE_ALREADY_EXISTS",
+}
+
+export const GenreErrorMessage = {
+  [GenreErrorCode.NOT_FOUND]: "Genre not found",
+  [GenreErrorCode.ALREADY_EXISTS]: "Genre with this name already exists",
+};
 
 export enum BookSchemaErrorMessage {
   TITLE_REQUIRED = "Title is required",

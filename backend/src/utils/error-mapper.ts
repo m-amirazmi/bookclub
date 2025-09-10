@@ -5,6 +5,8 @@ import {
   AuthorErrorMessage,
   CommonErrorCode,
   CommonErrorMessage,
+  GenreErrorCode,
+  GenreErrorMessage,
 } from "../consts/error-messages";
 import { ErrorResponseParamType } from "../plugins/response.plugin";
 
@@ -28,6 +30,20 @@ export function mapErrorToResponse(error: unknown): ErrorResponseParamType {
       return {
         errorCode: AuthorErrorCode.ALREADY_EXISTS,
         errorMessage: AuthorErrorMessage[AuthorErrorCode.ALREADY_EXISTS],
+        statusCode: HttpStatus.CONFLICT,
+      };
+
+    case GenreErrorCode.NOT_FOUND:
+      return {
+        errorCode: GenreErrorCode.NOT_FOUND,
+        errorMessage: GenreErrorMessage[GenreErrorCode.NOT_FOUND],
+        statusCode: HttpStatus.NOT_FOUND,
+      };
+
+    case GenreErrorCode.ALREADY_EXISTS:
+      return {
+        errorCode: GenreErrorCode.ALREADY_EXISTS,
+        errorMessage: GenreErrorMessage[GenreErrorCode.ALREADY_EXISTS],
         statusCode: HttpStatus.CONFLICT,
       };
     default:

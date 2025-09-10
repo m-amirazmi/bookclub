@@ -2,6 +2,7 @@ import Fastify from "fastify";
 import authorRoutes from "./modules/author/author.route";
 import { dbPlugin } from "./plugins/db.plugin";
 import { responsePlugin } from "./plugins/response.plugin";
+import genreRoutes from "./modules/book/genre/genre.route";
 
 const server = Fastify({ logger: { transport: { target: "pino-pretty" } } });
 
@@ -11,6 +12,7 @@ async function main() {
   server.register(dbPlugin);
   server.register(responsePlugin);
   server.register(authorRoutes, { prefix: "/api/authors" });
+  server.register(genreRoutes, { prefix: "/api/genres" });
 
   try {
     await server.listen({ port: 3000, host: "0.0.0.0" });
