@@ -1,16 +1,13 @@
-import { FastifyRequest, FastifyReply } from "fastify";
+import { FastifyReply, FastifyRequest } from "fastify";
 import { HttpStatus } from "../../../consts/http-status";
 import { mapErrorToResponse } from "../../../utils/error-mapper";
 import { LoggerHelper } from "../../../utils/logger-helper";
-import {
-  AuthorParams,
-  CreateAuthor,
-  UpdateAuthor,
-} from "../../author/author.schema";
+
+import { CreateGenre, GenreParams, UpdateGenre } from "./genre.schema";
 import { GenreService } from "./genre.service";
 
 export class GenreController {
-  private readonly logger: LoggerHelper;
+  private logger: LoggerHelper;
 
   constructor(private genreService: GenreService) {
     this.logger = new LoggerHelper(GenreController.name);
@@ -18,11 +15,11 @@ export class GenreController {
 
   async getAll(request: FastifyRequest, reply: FastifyReply) {
     const log = this.logger.log(request, this.getAll.name);
-    log.info("Fetching all authors");
+    log.info("Fetching all genres");
 
     try {
-      const authors = await this.genreService.getAllGenres();
-      return reply.success({ data: authors });
+      const genres = await this.genreService.getAllGenres();
+      return reply.success({ data: genres });
     } catch (error) {
       log.error(error);
       return reply.error(mapErrorToResponse(error));
@@ -30,16 +27,16 @@ export class GenreController {
   }
 
   async getById(
-    request: FastifyRequest<{ Params: AuthorParams }>,
+    request: FastifyRequest<{ Params: GenreParams }>,
     reply: FastifyReply
   ) {
     const { id } = request.params;
     const log = this.logger.log(request, this.getById.name);
-    log.info("Fetching author by ID: " + id);
+    log.info("Fetching genre by ID: " + id);
 
     try {
-      const author = await this.genreService.getGenreById(id);
-      return reply.success({ data: author });
+      const genre = await this.genreService.getGenreById(id);
+      return reply.success({ data: genre });
     } catch (error) {
       log.error(error);
       return reply.error(mapErrorToResponse(error));
@@ -47,16 +44,16 @@ export class GenreController {
   }
 
   async create(
-    request: FastifyRequest<{ Body: CreateAuthor }>,
+    request: FastifyRequest<{ Body: CreateGenre }>,
     reply: FastifyReply
   ) {
     const log = this.logger.log(request, this.create.name);
-    log.info("Creating new author");
+    log.info("Creating new genre");
 
     try {
-      const author = await this.genreService.createGenre(request.body);
+      const genre = await this.genreService.createGenre(request.body);
       return reply.success({
-        data: author,
+        data: genre,
         statusCode: HttpStatus.CREATED,
       });
     } catch (error) {
@@ -67,18 +64,18 @@ export class GenreController {
 
   async update(
     request: FastifyRequest<{
-      Params: AuthorParams;
-      Body: UpdateAuthor;
+      Params: GenreParams;
+      Body: UpdateGenre;
     }>,
     reply: FastifyReply
   ) {
     const { id } = request.params;
     const log = this.logger.log(request, this.update.name);
-    log.info("Updating author by ID: " + id);
+    log.info("Updating genre by ID: " + id);
 
     try {
-      const author = await this.genreService.updateGenre(id, request.body);
-      return reply.success({ data: author });
+      const genre = await this.genreService.updateGenre(id, request.body);
+      return reply.success({ data: genre });
     } catch (error) {
       log.error(error);
       return reply.error(mapErrorToResponse(error));
@@ -86,12 +83,12 @@ export class GenreController {
   }
 
   async delete(
-    request: FastifyRequest<{ Params: AuthorParams }>,
+    request: FastifyRequest<{ Params: GenreParams }>,
     reply: FastifyReply
   ) {
     const { id } = request.params;
     const log = this.logger.log(request, this.delete.name);
-    log.info("Deleting author by ID: " + id);
+    log.info("Deleting genre by ID: " + id);
 
     try {
       await this.genreService.deleteGenre(id);

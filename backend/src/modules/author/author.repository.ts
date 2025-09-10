@@ -1,5 +1,4 @@
-import { Author, PrismaClient } from "@prisma/client";
-import { CreateAuthor, UpdateAuthor } from "./author.schema";
+import { Author, Prisma, PrismaClient } from "@prisma/client";
 
 export class AuthorRepository {
   constructor(private db: PrismaClient) {}
@@ -12,18 +11,17 @@ export class AuthorRepository {
     return await this.db.author.findUnique({ where: { id } });
   }
 
-  async create(data: CreateAuthor): Promise<Author> {
+  async create(data: Prisma.AuthorCreateInput): Promise<Author> {
     return await this.db.author.create({ data });
   }
 
-  async update(id: number, data: UpdateAuthor): Promise<Author | null> {
+  async update(
+    id: number,
+    data: Prisma.AuthorUpdateInput
+  ): Promise<Author | null> {
     return await this.db.author.update({
       where: { id },
-      data: {
-        ...(data.name && { name: data.name }),
-        ...(data.bio !== undefined && { bio: data.bio }),
-        updatedAt: new Date(),
-      },
+      data: { ...data, updatedAt: new Date() },
     });
   }
 

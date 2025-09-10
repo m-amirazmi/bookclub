@@ -1,0 +1,103 @@
+# ========================
+# Authors
+# ========================
+
+### Create Author
+POST http://localhost:3000/api/authors
+Content-Type: application/json
+
+{
+  "name": "J.K. Rowling",
+  "bio": "Author of Harry Potter series"
+}
+
+### Get All Authors
+GET http://localhost:3000/api/authors
+
+### Get Author by ID
+GET http://localhost:3000/api/authors/3
+
+### Update Author
+PATCH http://localhost:3000/api/authors/3
+Content-Type: application/json
+
+{
+  "bio": "British author, philanthropist"
+}
+
+### Delete Author
+DELETE http://localhost:3000/api/authors/2
+
+# ========================
+# Genres
+# ========================
+
+### Create Genre
+POST http://localhost:3000/api/genres
+Content-Type: application/json
+
+{
+  "name": "Fantasy"
+}
+
+### Get All Genres
+GET http://localhost:3000/api/genres
+
+### Get Genre by ID
+GET http://localhost:3000/api/genres/2
+
+### Update Genre
+PATCH http://localhost:3000/api/genres/2
+Content-Type: application/json
+
+{
+  "name": "Fantasy Fiction"
+}
+
+### Delete Genre
+DELETE http://localhost:3000/api/genres/1
+
+# ========================
+# Books
+# ========================
+
+### Create Book with Existing Author & Genre IDs
+POST http://localhost:3000/api/books
+Content-Type: application/json
+
+{
+  "title": "Harry Potter and the Philosopher's Stone",
+  "authorId": 3,
+  "publishedYear": 1997,
+  "genreIds": [2]
+}
+
+### Create Book with New Author & Genres
+POST http://localhost:3000/api/books
+Content-Type: application/json
+
+{
+  "title": "New Book Example",
+  "author": { "name": "New Author" },
+  "publishedYear": 2025,
+  "genres": [{ "name": "Adventure" }, { "name": "Mystery" }]
+}
+
+### Get All Books
+GET http://localhost:3000/api/books
+
+### Get Book by ID
+GET http://localhost:3000/api/books/3
+
+### Update Book (Change Title, Author, and Genres)
+PATCH http://localhost:3000/api/books/3
+Content-Type: application/json
+
+{
+  "title": "Harry Potter - Updated",
+  "author": { "name": "Updated Author" },
+  "genres": [{ "name": "Fantasy" }, { "name": "Magic" }]
+}
+
+### Delete Book
+DELETE http://localhost:3000/api/books/1

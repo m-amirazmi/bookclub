@@ -3,6 +3,8 @@ import { HttpStatus } from "../consts/http-status";
 import {
   AuthorErrorCode,
   AuthorErrorMessage,
+  BookErrorCode,
+  BookErrorMessage,
   CommonErrorCode,
   CommonErrorMessage,
   GenreErrorCode,
@@ -46,6 +48,29 @@ export function mapErrorToResponse(error: unknown): ErrorResponseParamType {
         errorMessage: GenreErrorMessage[GenreErrorCode.ALREADY_EXISTS],
         statusCode: HttpStatus.CONFLICT,
       };
+
+    case GenreErrorCode.SOME_INVALID:
+      return {
+        errorCode: GenreErrorCode.SOME_INVALID,
+        errorMessage: GenreErrorMessage[GenreErrorCode.SOME_INVALID],
+        statusCode: HttpStatus.BAD_REQUEST,
+      };
+
+    case BookErrorCode.NOT_FOUND:
+      return {
+        errorCode: BookErrorCode.NOT_FOUND,
+        errorMessage: BookErrorMessage[BookErrorCode.NOT_FOUND],
+        statusCode: HttpStatus.NOT_FOUND,
+      };
+
+    case BookErrorCode.AUTHOR_ID_OR_AUTHOR_REQUIRED:
+      return {
+        errorCode: BookErrorCode.AUTHOR_ID_OR_AUTHOR_REQUIRED,
+        errorMessage:
+          BookErrorMessage[BookErrorCode.AUTHOR_ID_OR_AUTHOR_REQUIRED],
+        statusCode: HttpStatus.CONFLICT,
+      };
+
     default:
       return defaultError;
   }

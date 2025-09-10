@@ -6,7 +6,7 @@ import { AuthorParams, CreateAuthor, UpdateAuthor } from "./author.schema";
 import { AuthorService } from "./author.service";
 
 export class AuthorController {
-  private readonly logger: LoggerHelper;
+  private logger: LoggerHelper;
 
   constructor(private authorService: AuthorService) {
     this.logger = new LoggerHelper(AuthorController.name);

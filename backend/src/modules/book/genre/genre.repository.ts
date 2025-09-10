@@ -1,5 +1,4 @@
-import { Genre, PrismaClient } from "@prisma/client";
-import { CreateGenre, UpdateGenre } from "./genre.schema";
+import { Genre, Prisma, PrismaClient } from "@prisma/client";
 
 export class GenreRepository {
   constructor(private db: PrismaClient) {}
@@ -12,17 +11,24 @@ export class GenreRepository {
     return await this.db.genre.findUnique({ where: { id } });
   }
 
-  async create(data: CreateGenre): Promise<Genre> {
+  async findExistingGenres(ids: number[]) {
+    return await this.db.genre.findMany({
+      where: { id: { in: ids } },
+      select: { id: true },
+    });
+  }
+
+  async create(data: Prisma.GenreCreateInput): Promise<Genre> {
     return await this.db.genre.create({ data });
   }
 
-  async update(id: number, data: UpdateGenre): Promise<Genre | null> {
+  async update(
+    id: number,
+    data: Prisma.GenreUpdateInput
+  ): Promise<Genre | null> {
     return await this.db.genre.update({
       where: { id },
-      data: {
-        ...(data.name && { name: data.name }),
-        updatedAt: new Date(),
-      },
+      data: { ...data, updatedAt: new Date() },
     });
   }
 

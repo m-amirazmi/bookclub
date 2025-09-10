@@ -1,7 +1,7 @@
 import { FastifyBaseLogger, FastifyRequest } from "fastify";
 
 export class LoggerHelper {
-  constructor(private readonly module: string) {}
+  constructor(private module: string) {}
   public log(request: FastifyRequest, context?: string): FastifyBaseLogger {
     return request.log.child({
       module: this.module,

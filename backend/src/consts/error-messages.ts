@@ -38,11 +38,13 @@ export enum GenreSchemaErrorMessage {
 export enum GenreErrorCode {
   NOT_FOUND = "GENRE_NOT_FOUND",
   ALREADY_EXISTS = "GENRE_ALREADY_EXISTS",
+  SOME_INVALID = "GENRE_IDS_INVALID",
 }
 
 export const GenreErrorMessage = {
   [GenreErrorCode.NOT_FOUND]: "Genre not found",
   [GenreErrorCode.ALREADY_EXISTS]: "Genre with this name already exists",
+  [GenreErrorCode.SOME_INVALID]: "Some genre ids are invalid",
 };
 
 export enum BookSchemaErrorMessage {
@@ -50,4 +52,16 @@ export enum BookSchemaErrorMessage {
   TITLE_TOO_LONG = "Title too long",
   AUTHOR_REQUIRED = "Author ID is required",
   PUBLISHED_YEAR_REQUIRED = "Published year is required",
+  AUTHOR_ID_OR_AUTHOR_REQUIRED = "Either authorId or author must be provided",
 }
+
+export enum BookErrorCode {
+  AUTHOR_ID_OR_AUTHOR_REQUIRED = "BOOK_AUTHOR_ID_OR_AUTHOR_REQUIRED",
+  NOT_FOUND = "BOOK_NOT_FOUND",
+}
+
+export const BookErrorMessage = {
+  [BookErrorCode.AUTHOR_ID_OR_AUTHOR_REQUIRED]:
+    "Either authorId or author must be provided",
+  [BookErrorCode.NOT_FOUND]: "Book not found",
+};
