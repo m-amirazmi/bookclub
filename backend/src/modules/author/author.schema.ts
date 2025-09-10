@@ -1,21 +1,23 @@
 import { z } from "zod";
+import {
+  AuthorSchemaErrorMessage,
+  CommonSchemaErrorMessage,
+} from "../../consts/error-messages";
 
 export const createAuthorSchema = z.object({
-  name: z.string().min(1, "Name is required").max(255, "Name too long"),
-  bio: z.string().max(1000, "Bio too long").optional(),
+  name: z
+    .string({ required_error: AuthorSchemaErrorMessage.NAME_REQUIRED })
+    .max(255, AuthorSchemaErrorMessage.NAME_TOO_LONG),
+  bio: z.string().max(1000, AuthorSchemaErrorMessage.BIO_TOO_LONG).optional(),
 });
 
-export const updateAuthorSchema = z.object({
-  name: z
-    .string()
-    .min(1, "Name is required")
-    .max(255, "Name too long")
-    .optional(),
-  bio: z.string().max(1000, "Bio too long").optional(),
-});
+export const updateAuthorSchema = createAuthorSchema.partial();
 
 export const authorParamsSchema = z.object({
-  id: z.string().regex(/^\d+$/, "Invalid ID format"),
+  id: z.coerce
+    .number({ invalid_type_error: CommonSchemaErrorMessage.INVALID_ID })
+    .int()
+    .positive(),
 });
 
 // Type exports

@@ -18,16 +18,16 @@ export function mapErrorToResponse(error: unknown): ErrorResponseParamType {
   if (!(error instanceof Error)) return defaultError;
 
   switch (error.message) {
-    case AuthorErrorCode.AUTHOR_NOT_FOUND:
+    case AuthorErrorCode.NOT_FOUND:
       return {
-        errorCode: AuthorErrorCode.AUTHOR_NOT_FOUND,
-        errorMessage: AuthorErrorMessage[AuthorErrorCode.AUTHOR_NOT_FOUND],
+        errorCode: AuthorErrorCode.NOT_FOUND,
+        errorMessage: AuthorErrorMessage[AuthorErrorCode.NOT_FOUND],
         statusCode: HttpStatus.NOT_FOUND,
       };
-    case AuthorErrorCode.AUTHOR_ALREADY_EXISTS:
+    case AuthorErrorCode.ALREADY_EXISTS:
       return {
-        errorCode: AuthorErrorCode.AUTHOR_ALREADY_EXISTS,
-        errorMessage: AuthorErrorMessage[AuthorErrorCode.AUTHOR_ALREADY_EXISTS],
+        errorCode: AuthorErrorCode.ALREADY_EXISTS,
+        errorMessage: AuthorErrorMessage[AuthorErrorCode.ALREADY_EXISTS],
         statusCode: HttpStatus.CONFLICT,
       };
     default:
