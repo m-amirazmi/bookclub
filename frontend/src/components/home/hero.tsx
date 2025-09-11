@@ -50,7 +50,7 @@ export default function Hero() {
           ]}
         />
       </div>
-      <div className="w-2/3 flex flex-col">
+      <div className="w-2/3 flex flex-col-reverse">
         <div className="w-full flex flex-wrap">
           {books.map((book) => (
             <div key={book.id} className="pl-4 w-1/4">
@@ -58,11 +58,11 @@ export default function Hero() {
             </div>
           ))}
         </div>
-        <Button className="mt-6 ml-auto cursor-pointer flex items-center">
+        <Button className="my-6 ml-auto cursor-pointer flex items-center">
           <span>View More List</span>
           <MoveRight />
         </Button>
-        <div className="ml-4 mt-auto flex flex-col">
+        <div className="ml-4 mb-auto flex flex-col">
           <h2 className="text-3xl font-bold mb-4">Your Current Reading List</h2>
           <div className="flex gap-4">
             <div className="w-1/3">

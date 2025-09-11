@@ -18,7 +18,7 @@ export default function AnalyticCard({
         <div className="flex items-center">
           <div>
             <CardDescription className="text-base">{title}</CardDescription>
-            <CardTitle className="text-4xl font-semibold tabular-nums @[250px]/card:text-3xl">
+            <CardTitle className="text-5xl font-semibold tabular-nums @[250px]/card:text-3xl">
               {value}
             </CardTitle>
           </div>
