@@ -5,8 +5,8 @@ import { TanstackDevtools } from '@tanstack/react-devtools'
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
 import type { QueryClient } from '@tanstack/react-query'
-import Header from '@/components/Header'
 import { Layout } from '@/components/layout'
+import Header from '@/components/header'
 
 interface MyRouterContext {
   queryClient: QueryClient
