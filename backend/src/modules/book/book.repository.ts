@@ -1,17 +1,10 @@
 import { Book, Prisma, PrismaClient } from "@prisma/client";
-
-type BookResponse = Prisma.BookGetPayload<{
-  include: {
-    author: true;
-    genres: { include: { genre: true } };
-    readingProgress: true;
-  };
-}>;
+import { BookRepoResponse } from "./book.type";
 
 export class BookRepository {
   constructor(private db: PrismaClient) {}
 
-  async findAll(): Promise<BookResponse[] | null> {
+  async findAll(): Promise<BookRepoResponse[] | null> {
     return await this.db.book.findMany({
       orderBy: { createdAt: "desc" },
       include: {
@@ -24,7 +17,7 @@ export class BookRepository {
     });
   }
 
-  async findById(id: number): Promise<BookResponse | null> {
+  async findById(id: number): Promise<BookRepoResponse | null> {
     return await this.db.book.findUnique({
       where: { id },
       include: {
@@ -35,7 +28,7 @@ export class BookRepository {
     });
   }
 
-  async create(data: Prisma.BookCreateInput): Promise<BookResponse> {
+  async create(data: Prisma.BookCreateInput): Promise<BookRepoResponse> {
     return await this.db.book.create({
       data: {
         title: data.title,
@@ -54,7 +47,7 @@ export class BookRepository {
   async update(
     id: number,
     data: Prisma.BookUpdateInput
-  ): Promise<BookResponse> {
+  ): Promise<BookRepoResponse> {
     return await this.db.book.update({
       where: { id },
       data: { ...data, updatedAt: new Date() },

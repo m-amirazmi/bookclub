@@ -15,10 +15,10 @@ Content-Type: application/json
 GET http://localhost:3000/api/authors
 
 ### Get Author by ID
-GET http://localhost:3000/api/authors/3
+GET http://localhost:3000/api/authors/1
 
 ### Update Author
-PATCH http://localhost:3000/api/authors/3
+PATCH http://localhost:3000/api/authors/1
 Content-Type: application/json
 
 {
@@ -44,10 +44,10 @@ Content-Type: application/json
 GET http://localhost:3000/api/genres
 
 ### Get Genre by ID
-GET http://localhost:3000/api/genres/2
+GET http://localhost:3000/api/genres/1
 
 ### Update Genre
-PATCH http://localhost:3000/api/genres/2
+PATCH http://localhost:3000/api/genres/1
 Content-Type: application/json
 
 {
@@ -67,9 +67,9 @@ Content-Type: application/json
 
 {
   "title": "Harry Potter and the Philosopher's Stone",
-  "authorId": 3,
+  "authorId": 1,
   "publishedYear": 1997,
-  "genreIds": [2]
+  "genreIds": [1]
 }
 
 ### Create Book with New Author & Genres

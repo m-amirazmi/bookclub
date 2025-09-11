@@ -4,6 +4,24 @@ import { CreateBook, UpdateBook } from "./book.schema";
 import { AuthorService } from "../author/author.service";
 import { GenreService } from "./genre/genre.service";
 import { AuthorErrorCode, BookErrorCode } from "../../consts/error-messages";
+import { BookRepoResponse } from "./book.type";
+
+interface BookResponse {
+  id: number;
+  title: string;
+  publishedYear: number;
+  createdAt: Date;
+  updatedAt: Date;
+  author: {
+    id: number;
+    name: string;
+    bio?: string | null;
+  };
+  genres?: {
+    id: number;
+    name: string;
+  }[];
+}
 
 export class BookService {
   constructor(
@@ -12,15 +30,38 @@ export class BookService {
     private genreService: GenreService
   ) {}
 
-  async getAllBooks() {
-    return await this.bookRepo.findAll();
+  private setBookResponse(book: BookRepoResponse) {
+    return {
+      id: book.id,
+      title: book.title,
+      publishedYear: book.publishedYear,
+      createdAt: book.createdAt,
+      updatedAt: book.updatedAt,
+      author: {
+        id: book.authorId,
+        name: book.author.name,
+        bio: book.author.bio,
+      },
+      genres: book.genres.map(({ genre }) => ({
+        id: genre.id,
+        name: genre.name,
+      })),
+    };
   }
 
-  async getBookById(id: number) {
-    return await this.bookRepo.findById(id);
+  async getAllBooks(): Promise<BookResponse[]> {
+    const books = await this.bookRepo.findAll();
+    if (!books) return [];
+    return books.map((book) => this.setBookResponse(book));
   }
 
-  async createBook(data: CreateBook): Promise<Book | null> {
+  async getBookById(id: number): Promise<BookResponse | null> {
+    const book = await this.bookRepo.findById(id);
+    if (!book) return null;
+    return this.setBookResponse(book);
+  }
+
+  async createBook(data: CreateBook): Promise<BookResponse | null> {
     let author: Author;
     if (data.authorId) {
       author = await this.authorService.getAuthorById(data.authorId);
@@ -45,10 +86,13 @@ export class BookService {
 
     if (genreIds.length) await this.bookRepo.attachGenres(book.id, genreIds);
 
-    return await this.bookRepo.findById(book.id);
+    const findBook = await this.bookRepo.findById(book.id);
+
+    if (!findBook) return null;
+    return this.setBookResponse(findBook);
   }
 
-  async updateBook(id: number, data: UpdateBook): Promise<Book | null> {
+  async updateBook(id: number, data: UpdateBook): Promise<BookResponse | null> {
     const existingBook = await this.bookRepo.findById(id);
     if (!existingBook) throw new Error(BookErrorCode.NOT_FOUND);
 
@@ -73,7 +117,9 @@ export class BookService {
     await this.bookRepo.detachGenres(book.id, []);
 
     if (genreIds.length) await this.bookRepo.attachGenres(book.id, genreIds);
-    return this.bookRepo.findById(book.id);
+    const findBook = await this.bookRepo.findById(book.id);
+    if (!findBook) return null;
+    return this.setBookResponse(findBook);
   }
 
   async deleteBook(id: number): Promise<void> {
