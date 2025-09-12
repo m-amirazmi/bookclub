@@ -37,6 +37,11 @@ const baseBookSchema = z.object({
     .int()
     .min(1000, CommonSchemaErrorMessage.INVALID_YEAR)
     .max(new Date().getFullYear(), CommonSchemaErrorMessage.INVALID_YEAR),
+  readingProgress: z
+    .number()
+    .min(0, CommonSchemaErrorMessage.INVALID_PROGRESS)
+    .max(100, CommonSchemaErrorMessage.INVALID_PROGRESS)
+    .optional(),
   genreIds: z
     .array(
       z.coerce

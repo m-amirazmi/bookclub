@@ -1,6 +1,7 @@
 export enum CommonSchemaErrorMessage {
   INVALID_ID = "Invalid ID",
   INVALID_YEAR = "Invalid year",
+  INVALID_PROGRESS = "Invalid progress",
 }
 
 export enum CommonErrorCode {
