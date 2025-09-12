@@ -13,6 +13,7 @@ interface BookResponse {
   description?: string;
   createdAt: Date;
   updatedAt: Date;
+  readingProgress?: number;
   author: {
     id: number;
     name: string;
@@ -32,8 +33,6 @@ export class BookService {
   ) {}
 
   private setBookResponse(book: BookRepoResponse) {
-    console.log({ book });
-
     return {
       id: book.id,
       title: book.title,
@@ -41,6 +40,7 @@ export class BookService {
       description: book.description || undefined,
       createdAt: book.createdAt,
       updatedAt: book.updatedAt,
+      readingProgress: book.readingProgress || undefined,
       author: {
         id: book.authorId,
         name: book.author.name,
