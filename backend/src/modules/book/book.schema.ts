@@ -10,6 +10,7 @@ const baseBookSchema = z.object({
   title: z
     .string({ required_error: BookSchemaErrorMessage.TITLE_REQUIRED })
     .max(255, BookSchemaErrorMessage.TITLE_TOO_LONG),
+  description: z.string().optional(),
   authorId: z.coerce
     .number({
       invalid_type_error: CommonSchemaErrorMessage.INVALID_ID,

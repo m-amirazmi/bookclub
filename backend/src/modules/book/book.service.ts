@@ -10,6 +10,7 @@ interface BookResponse {
   id: number;
   title: string;
   publishedYear: number;
+  description?: string;
   createdAt: Date;
   updatedAt: Date;
   author: {
@@ -31,10 +32,13 @@ export class BookService {
   ) {}
 
   private setBookResponse(book: BookRepoResponse) {
+    console.log({ book });
+
     return {
       id: book.id,
       title: book.title,
       publishedYear: book.publishedYear,
+      description: book.description || undefined,
       createdAt: book.createdAt,
       updatedAt: book.updatedAt,
       author: {
@@ -57,6 +61,8 @@ export class BookService {
 
   async getBookById(id: number): Promise<BookResponse | null> {
     const book = await this.bookRepo.findById(id);
+    console.log("HEREEE", { book });
+
     if (!book) return null;
     return this.setBookResponse(book);
   }
@@ -81,6 +87,7 @@ export class BookService {
     const book = await this.bookRepo.create({
       title: data.title,
       publishedYear: data.publishedYear,
+      description: data.description,
       author: { connect: author },
     });
 

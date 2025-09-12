@@ -55,7 +55,7 @@ Content-Type: application/json
 }
 
 ### Delete Genre
-DELETE http://localhost:3000/api/genres/1
+DELETE http://localhost:3000/api/genres/4
 
 # ========================
 # Books
@@ -67,7 +67,7 @@ Content-Type: application/json
 
 {
   "title": "Harry Potter and the Philosopher's Stone",
-  "authorId": 1,
+  "authorId": 2,
   "publishedYear": 1997,
   "genreIds": [1]
 }
@@ -78,7 +78,8 @@ Content-Type: application/json
 
 {
   "title": "New Book Example",
-  "author": { "name": "New Author" },
+  "author": { "name": "wow" },
+  "description": "This is the book description",
   "publishedYear": 2025,
   "genres": [{ "name": "Adventure" }, { "name": "Mystery" }]
 }
@@ -87,7 +88,7 @@ Content-Type: application/json
 GET http://localhost:3000/api/books
 
 ### Get Book by ID
-GET http://localhost:3000/api/books/3
+GET http://localhost:3000/api/books/5
 
 ### Update Book (Change Title, Author, and Genres)
 PATCH http://localhost:3000/api/books/3

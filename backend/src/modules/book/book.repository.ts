@@ -30,12 +30,7 @@ export class BookRepository {
 
   async create(data: Prisma.BookCreateInput): Promise<BookRepoResponse> {
     return await this.db.book.create({
-      data: {
-        title: data.title,
-        publishedYear: data.publishedYear,
-        author: data.author,
-        readingProgress: data.readingProgress,
-      },
+      data,
       include: {
         author: true,
         genres: { include: { genre: true } },

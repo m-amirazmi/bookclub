@@ -11,7 +11,8 @@
     "db:push": "prisma db push",
     "db:pull": "prisma db pull",
     "db:migrate": "prisma migrate dev",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "db:seed": "prisma db seed"
   },
   "keywords": [],
   "author": "",
