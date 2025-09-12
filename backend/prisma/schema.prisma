@@ -17,16 +17,16 @@ model Author {
 }
 
 model Book {
-  id              Int              @id @default(autoincrement())
+  id              Int         @id @default(autoincrement())
   title           String
   description     String?
-  author          Author           @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author          Author      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId        Int
   publishedYear   Int
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
+  readingProgress Int?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
   genres          BookGenre[]
-  readingProgress ReadingProgress?
 }
 
 model BookGenre {
@@ -44,20 +44,4 @@ model Genre {
   books     BookGenre[]
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
-}
-
-enum ReadingStatus {
-  NOT_STARTED       @map("not_started")
-  CURRENTLY_READING @map("currently_reading")
-  COMPLETED         @map("completed")
-}
-
-model ReadingProgress {
-  id        Int           @id @default(autoincrement())
-  book      Book          @relation(fields: [bookId], references: [id])
-  bookId    Int           @unique
-  progress  Int           @default(0)
-  status    ReadingStatus @default(NOT_STARTED)
-  startedAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
 }

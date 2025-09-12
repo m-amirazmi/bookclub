@@ -67,7 +67,7 @@ function pickRandomGenres(genres: Pick<Genre, "name" | "id">[]): number[] {
 const initialBooks: (Pick<
   Book,
   "id" | "authorId" | "publishedYear" | "title" | "description"
-> & { genres: number[] })[] = [
+> & { genres: number[]; readingProgress?: number })[] = [
   // Jane Austen
   {
     id: 1,
@@ -133,6 +133,7 @@ const initialBooks: (Pick<
     description:
       "Harry discovers he is a wizard and begins his magical education at Hogwarts.",
     genres: pickRandomGenres(initialGenres),
+    readingProgress: 75,
   },
   {
     id: 8,
@@ -198,6 +199,7 @@ const initialBooks: (Pick<
     description:
       "Detective Hercule Poirot solves a murder case aboard a luxurious train.",
     genres: pickRandomGenres(initialGenres),
+    readingProgress: 35,
   },
   {
     id: 15,
@@ -225,6 +227,7 @@ const initialBooks: (Pick<
     description:
       "A luxurious cruise turns deadly, and Poirot must solve the murder aboard a riverboat.",
     genres: pickRandomGenres(initialGenres),
+    readingProgress: 100,
   },
   {
     id: 18,
@@ -254,6 +257,7 @@ const initialBooks: (Pick<
     description:
       "A symbologist unravels a conspiracy hidden within famous artworks.",
     genres: pickRandomGenres(initialGenres),
+    readingProgress: 55,
   },
   {
     id: 21,
@@ -281,6 +285,7 @@ const initialBooks: (Pick<
     description:
       "A futuristic mystery explores science, religion, and humanity’s origin.",
     genres: pickRandomGenres(initialGenres),
+    readingProgress: 10,
   },
   {
     id: 24,
@@ -310,6 +315,7 @@ const initialBooks: (Pick<
     description:
       "Teenagers with cancer navigate love, life, and loss in a poignant story.",
     genres: pickRandomGenres(initialGenres),
+    readingProgress: 0,
   },
   {
     id: 27,

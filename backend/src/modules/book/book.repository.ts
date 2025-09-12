@@ -12,7 +12,6 @@ export class BookRepository {
         genres: {
           include: { genre: true },
         },
-        readingProgress: true,
       },
     });
   }
@@ -23,7 +22,6 @@ export class BookRepository {
       include: {
         author: true,
         genres: { include: { genre: true } },
-        readingProgress: true,
       },
     });
   }
@@ -34,7 +32,6 @@ export class BookRepository {
       include: {
         author: true,
         genres: { include: { genre: true } },
-        readingProgress: true,
       },
     });
   }
@@ -49,7 +46,6 @@ export class BookRepository {
       include: {
         author: true,
         genres: { include: { genre: true } },
-        readingProgress: true,
       },
     });
   }
