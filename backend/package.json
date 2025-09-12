@@ -12,7 +12,7 @@
     "db:pull": "prisma db pull",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
-    "db:seed": "prisma db seed"
+    "db:seed": "tsx prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
