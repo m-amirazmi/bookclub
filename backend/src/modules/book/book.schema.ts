@@ -71,12 +71,7 @@ export const createBookSchema = baseBookSchema.refine(
   }
 );
 
-export const updateBookSchema = baseBookSchema
-  .partial()
-  .refine(({ author, authorId }) => author || authorId, {
-    message: BookSchemaErrorMessage.AUTHOR_ID_OR_AUTHOR_REQUIRED,
-    path: ["authorId", "author"],
-  });
+export const updateBookSchema = baseBookSchema.partial();
 
 export const bookParamsSchema = z.object({
   id: z.coerce

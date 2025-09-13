@@ -1,60 +1,50 @@
+import AnalyticCard from '@/components/analyticcard'
+import BookCard from '@/components/bookcard'
+import { Button } from '@/components/ui/button'
+import type { Book } from '@/lib/types'
 import {
   BookCheckIcon,
   BookMarkedIcon,
   BookTextIcon,
   MoveRight,
 } from 'lucide-react'
-import AnalyticCard from '@/components/analyticcard'
-import BookCard from '@/components/bookcard'
-import { Button } from '@/components/ui/button'
 
-const books = [
-  {
-    id: '1',
-    title: 'Book 1',
-    author: 'Amer',
-    genres: [{ id: 1, name: 'Horror' }],
-  },
-  {
-    id: '2',
-    title: 'Book 2',
-    author: 'Azmi',
-    genres: [{ id: 1, name: 'Horror' }],
-  },
-  {
-    id: '3',
-    title: 'Book 3',
-    author: 'Mayah',
-    genres: [{ id: 1, name: 'Horror' }],
-  },
-  {
-    id: '4',
-    title: 'Book 4',
-    author: 'Mariah',
-    genres: [{ id: 1, name: 'Horror' }],
-  },
-]
+type HeroProps = {
+  isLoading?: boolean
+  books: Book[] // Only accept 5 books (all that have progress even 0%)
+}
 
-export default function Hero() {
+export default function Hero({ isLoading, books }: HeroProps) {
+  const [mainBook, ...rest] = books
+
+  const otherBooks = isLoading ? Array(4).fill('') : rest
+
   return (
     <div className="flex w-full">
       <div className="pr-2 w-1/3">
         <BookCard
+          id={mainBook?.id}
           enableProgress
-          author="Hi there"
-          title="Lalala"
-          genres={[
-            { id: 1, name: 'Horror' },
-            { id: 2, name: 'Mystery' },
-            { id: 3, name: 'Psychological' },
-          ]}
+          author={mainBook?.author?.name || ''}
+          progress={mainBook?.readingProgress}
+          title={mainBook?.title}
+          loading={isLoading}
+          genres={mainBook?.genres}
         />
       </div>
       <div className="w-2/3 flex flex-col-reverse">
         <div className="w-full flex flex-wrap">
-          {books.map((book) => (
+          {otherBooks.map((book) => (
             <div key={book.id} className="pl-4 w-1/4">
-              <BookCard {...book} infoOnHover infoSize="sm" />
+              <BookCard
+                {...book}
+                author={book?.author?.name}
+                progress={book?.readingProgress}
+                infoOnHover
+                singleGenre
+                infoSize="sm"
+                loading={isLoading}
+              />
             </div>
           ))}
         </div>

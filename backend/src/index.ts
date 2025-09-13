@@ -1,4 +1,5 @@
 import Fastify from "fastify";
+import cors from "@fastify/cors";
 import authorRoutes from "./modules/author/author.route";
 import { dbPlugin } from "./plugins/db.plugin";
 import { responsePlugin } from "./plugins/response.plugin";
@@ -10,8 +11,14 @@ const server = Fastify({ logger: { transport: { target: "pino-pretty" } } });
 server.get("/health", async () => ({ status: "ok" }));
 
 async function main() {
-  server.register(dbPlugin);
-  server.register(responsePlugin);
+  await server.register(cors, {
+    origin: "*",
+    methods: "*",
+    allowedHeaders: "*",
+  });
+  await server.register(dbPlugin);
+  await server.register(responsePlugin);
+
   server.register(authorRoutes, { prefix: "/api/authors" });
   server.register(genreRoutes, { prefix: "/api/genres" });
   server.register(bookRoutes, { prefix: "/api/books" });

@@ -40,7 +40,7 @@ export class BookService {
       description: book.description || undefined,
       createdAt: book.createdAt,
       updatedAt: book.updatedAt,
-      readingProgress: book.readingProgress || undefined,
+      readingProgress: book.readingProgress ?? undefined,
       author: {
         id: book.authorId,
         name: book.author.name,
@@ -55,6 +55,7 @@ export class BookService {
 
   async getAllBooks(): Promise<BookResponse[]> {
     const books = await this.bookRepo.findAll();
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 sec delay
     if (!books) return [];
     return books.map((book) => this.setBookResponse(book));
   }
@@ -103,23 +104,31 @@ export class BookService {
     const existingBook = await this.bookRepo.findById(id);
     if (!existingBook) throw new Error(BookErrorCode.NOT_FOUND);
 
+    const {
+      author,
+      authorId: inputAuthorId,
+      genres,
+      genreIds: inputGenreIds,
+      ...rest
+    } = data;
+
     let authorId: number | undefined;
-    if (data.authorId) authorId = data.authorId;
+    if (inputAuthorId) authorId = inputAuthorId;
     if (data.author) {
       const author = await this.authorService.createAuthor(data.author);
       authorId = author.id;
     }
+    if (!data.author && !inputAuthorId) authorId = existingBook.authorId;
 
     const book = await this.bookRepo.update(id, {
-      title: data.title,
-      publishedYear: data.publishedYear,
+      ...rest,
       ...(authorId && { author: { connect: { id: authorId } } }),
     });
 
-    const genreIds = await this.genreService.getOrCreateIds(data.genres ?? []);
-    if (data.genreIds?.length) {
-      const isValid = await this.genreService.checkGenreExists(data.genreIds);
-      if (isValid) genreIds.push(...data.genreIds);
+    const genreIds = await this.genreService.getOrCreateIds(genres ?? []);
+    if (inputGenreIds?.length) {
+      const isValid = await this.genreService.checkGenreExists(inputGenreIds);
+      if (isValid) genreIds.push(...inputGenreIds);
     }
     await this.bookRepo.detachGenres(book.id, []);
 
