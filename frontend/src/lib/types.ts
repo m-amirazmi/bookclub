@@ -13,11 +13,11 @@ export interface Book {
   id: number
   title: string
   publishedYear: number
-  description: string
+  description?: string
   createdAt: string // ISO date string
   updatedAt: string // ISO date string
   author: Author
-  genres: Genre[]
+  genres: Array<Genre>
   readingProgress?: number
 }
 
@@ -26,7 +26,7 @@ export interface Response {
 }
 
 export interface BooksResponse extends Response {
-  data: Book[]
+  data: Array<Book>
 }
 
 export interface BookResponse extends Response {

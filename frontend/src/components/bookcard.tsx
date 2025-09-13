@@ -4,8 +4,8 @@ import { Card } from './ui/card'
 import { Badge } from './ui/badge'
 import { Progress } from './ui/progress'
 import { Button } from './ui/button'
-import { cn } from '@/lib/utils'
 import { Skeleton } from './ui/skeleton'
+import { cn } from '@/lib/utils'
 import { useUpdateBookProgress } from '@/hooks/useUpdateBookProgress'
 
 type BookGenre = {
@@ -101,9 +101,9 @@ export default function BookCard({
           )}
         >
           {!singleGenre ? (
-            genres?.slice(0, 3).map(({ id, name }) => (
+            genres?.slice(0, 3).map(({ id: gid, name }) => (
               <Badge
-                id={id.toString()}
+                id={gid.toString()}
                 variant="secondary"
                 className="cursor-pointer"
               >
@@ -125,9 +125,8 @@ export default function BookCard({
         </div>
         <div
           className={cn(
-            'absolute bg-gradient-to-t from-foreground/100 to-foreground/0 w-full bottom-0 transition-all duration-300',
-            infoOnHover ? 'opacity-0 group-hover:opacity-100' : 'opacity-100',
-            infoSize === 'sm' ? 'p-4' : 'px-6 py-8 ',
+            'absolute bg-gradient-to-t from-foreground/100 to-foreground/0 w-full bottom-0',
+            infoSize === 'sm' ? 'p-4' : 'px-6 py-8',
           )}
         >
           <h3
@@ -142,6 +141,7 @@ export default function BookCard({
             className={cn(
               'text-primary-foreground flex justify-between items-center',
               infoSize === 'sm' ? 'text-base' : 'text-lg',
+              infoOnHover ? 'hidden group-hover:flex' : 'flex',
             )}
           >
             <span>{author}</span>
@@ -160,7 +160,7 @@ export default function BookCard({
               >
                 <MinusIcon />
               </Button>
-              <span className="text-xl">{progress}%</span>
+              <span className="text-xl font-bold">{progress}%</span>
               <Button
                 size="icon"
                 className="rounded bg-transparent cursor-pointer"

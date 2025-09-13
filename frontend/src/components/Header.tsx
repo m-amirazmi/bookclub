@@ -1,16 +1,13 @@
 import {
   BookIcon,
+  ClipboardListIcon,
   GhostIcon,
   HouseIcon,
   PlusIcon,
-  SearchIcon,
 } from 'lucide-react'
-import { useId } from 'react'
-
 import { useLocation } from '@tanstack/react-router'
 import Logo from '@/components/logo'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -27,11 +24,10 @@ const navigationLinks = [
   { href: '/', label: 'Home', icon: HouseIcon },
   { href: '/books', label: 'Books', icon: BookIcon },
   { href: '/authors', label: 'Authors', icon: GhostIcon },
+  { href: '/my-list', label: 'My List', icon: ClipboardListIcon },
 ]
 
 export default function Header() {
-  const id = useId()
-
   const { pathname } = useLocation()
 
   const isActive = (link: string) => {
@@ -138,19 +134,6 @@ export default function Header() {
             <span>Add New Book</span>
           </Button>
         </NavigationMenu>
-        <div className="flex flex-1 items-center justify-end gap-2">
-          <div className="relative">
-            <Input
-              id={id}
-              className="peer h-8 ps-8 pe-2"
-              placeholder="Search..."
-              type="search"
-            />
-            <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-2 peer-disabled:opacity-50">
-              <SearchIcon size={16} />
-            </div>
-          </div>
-        </div>
       </div>
     </header>
   )
