@@ -7,6 +7,7 @@ import { Button } from './ui/button'
 import { Skeleton } from './ui/skeleton'
 import { cn } from '@/lib/utils'
 import { useUpdateBookProgress } from '@/hooks/useUpdateBookProgress'
+import { useNavigate } from '@tanstack/react-router'
 
 type BookGenre = {
   id: string | number
@@ -42,10 +43,9 @@ export default function BookCard({
   loading,
   singleGenre,
 }: BookCardProps) {
-  console.log('OK je', initialProgress)
-
   const [progress, setProgress] = useState(initialProgress ?? 0)
   const { debouncedMutate } = useUpdateBookProgress(id)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (initialProgress !== undefined) {
@@ -66,6 +66,9 @@ export default function BookCard({
     debouncedMutate(newVal)
   }
 
+  const handleBookDetail = () =>
+    navigate({ to: '/books/$bookId', params: { bookId: id.toString() } })
+
   return (
     <>
       <Skeleton
@@ -81,7 +84,7 @@ export default function BookCard({
           className,
         )}
       >
-        <div className={cn('aspect-[4/5] w-full')}>
+        <div className={cn('aspect-[4/5] w-full')} onClick={handleBookDetail}>
           {coverUrl ? (
             <img
               src={coverUrl}

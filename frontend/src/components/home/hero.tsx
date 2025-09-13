@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 type HeroProps = {
-  isLoading?: boolean
+  loading: boolean
   books: Array<Book> // Only accept 5 books (all that have progress even 0%)
 }
 
@@ -32,7 +32,7 @@ const onlyCompleted = (b: Book) => b.readingProgress === 100
 
 const otherBookTotal = 4
 
-export default function Hero({ isLoading, books }: HeroProps) {
+export default function Hero({ loading, books }: HeroProps) {
   const navigate = useNavigate()
 
   // Not include the completed
@@ -40,10 +40,10 @@ export default function Hero({ isLoading, books }: HeroProps) {
 
   const [main, ...rest] = displayBooks
 
-  const otherBooks = isLoading
+  const otherBooks = loading
     ? Array(4).fill('')
     : rest.filter(excludeCompleted).slice(0, 4)
-  const mainBook: Book = isLoading ? blankBookData : main
+  const mainBook: Book = loading ? blankBookData : main
 
   const analytics = {
     inList: books.length,
@@ -69,7 +69,7 @@ export default function Hero({ isLoading, books }: HeroProps) {
           author={mainBook.author.name}
           progress={mainBook.readingProgress}
           title={mainBook.title}
-          loading={isLoading}
+          loading={loading}
           genres={mainBook.genres}
         />
       </div>
@@ -84,7 +84,7 @@ export default function Hero({ isLoading, books }: HeroProps) {
                 infoOnHover
                 singleGenre
                 infoSize="sm"
-                loading={isLoading}
+                loading={loading}
               />
             </div>
           ))}
@@ -112,7 +112,7 @@ export default function Hero({ isLoading, books }: HeroProps) {
                 title="Book in List"
                 value={analytics.inList}
                 icon={BookMarkedIcon}
-                loading={isLoading}
+                loading={loading}
               />
             </div>
             <div className="w-1/3">
@@ -120,7 +120,7 @@ export default function Hero({ isLoading, books }: HeroProps) {
                 title="Currently Reading"
                 value={analytics.reading}
                 icon={BookTextIcon}
-                loading={isLoading}
+                loading={loading}
               />
             </div>
             <div className="w-1/3">
@@ -128,7 +128,7 @@ export default function Hero({ isLoading, books }: HeroProps) {
                 title="Books Completed"
                 value={analytics.completed}
                 icon={BookCheckIcon}
-                loading={isLoading}
+                loading={loading}
               />
             </div>
           </div>

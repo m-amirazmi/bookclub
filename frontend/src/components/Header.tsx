@@ -36,7 +36,7 @@ export default function Header() {
   }
 
   return (
-    <header className="border-b">
+    <header className="border-b sticky top-0 bg-background z-10">
       <div className="flex h-16 items-center justify-between gap-4 max-w-7xl mx-auto px-4">
         <div className="flex flex-1 items-center gap-2">
           <Popover>

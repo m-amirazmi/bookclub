@@ -62,8 +62,6 @@ export class BookService {
 
   async getBookById(id: number): Promise<BookResponse | null> {
     const book = await this.bookRepo.findById(id);
-    console.log("HEREEE", { book });
-
     if (!book) return null;
     return this.setBookResponse(book);
   }
