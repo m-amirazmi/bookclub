@@ -32,12 +32,16 @@ function RouteComponent() {
       </div>
       <div className="w-1/2 px-2">
         <h1 className="text-4xl font-bold mb-4">{book?.title}</h1>
-        <div className="flex gap-2">
+        <p className="mb-4 text-xl">Author: {book?.author.name}</p>
+        <div className="flex gap-2 mb-4">
           {book?.genres.map((g) => (
             <Badge key={g.id} variant="secondary">
               {g.name}
             </Badge>
           ))}
+        </div>
+        <div>
+          <p>{book?.description}</p>
         </div>
       </div>
     </div>
