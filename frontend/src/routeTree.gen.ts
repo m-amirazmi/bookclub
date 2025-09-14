@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MyListIndexRouteImport } from './routes/my-list/index'
 import { Route as BooksIndexRouteImport } from './routes/books/index'
-import { Route as DemoTanstackQueryRouteImport } from './routes/demo.tanstack-query'
 import { Route as BooksBookIdIndexRouteImport } from './routes/books/$bookId/index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -30,11 +29,6 @@ const BooksIndexRoute = BooksIndexRouteImport.update({
   path: '/books/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
-  id: '/demo/tanstack-query',
-  path: '/demo/tanstack-query',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const BooksBookIdIndexRoute = BooksBookIdIndexRouteImport.update({
   id: '/books/$bookId/',
   path: '/books/$bookId/',
@@ -43,14 +37,12 @@ const BooksBookIdIndexRoute = BooksBookIdIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/books': typeof BooksIndexRoute
   '/my-list': typeof MyListIndexRoute
   '/books/$bookId': typeof BooksBookIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/books': typeof BooksIndexRoute
   '/my-list': typeof MyListIndexRoute
   '/books/$bookId': typeof BooksBookIdIndexRoute
@@ -58,33 +50,20 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/books/': typeof BooksIndexRoute
   '/my-list/': typeof MyListIndexRoute
   '/books/$bookId/': typeof BooksBookIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/demo/tanstack-query'
-    | '/books'
-    | '/my-list'
-    | '/books/$bookId'
+  fullPaths: '/' | '/books' | '/my-list' | '/books/$bookId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/demo/tanstack-query' | '/books' | '/my-list' | '/books/$bookId'
-  id:
-    | '__root__'
-    | '/'
-    | '/demo/tanstack-query'
-    | '/books/'
-    | '/my-list/'
-    | '/books/$bookId/'
+  to: '/' | '/books' | '/my-list' | '/books/$bookId'
+  id: '__root__' | '/' | '/books/' | '/my-list/' | '/books/$bookId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   BooksIndexRoute: typeof BooksIndexRoute
   MyListIndexRoute: typeof MyListIndexRoute
   BooksBookIdIndexRoute: typeof BooksBookIdIndexRoute
@@ -113,13 +92,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BooksIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/tanstack-query': {
-      id: '/demo/tanstack-query'
-      path: '/demo/tanstack-query'
-      fullPath: '/demo/tanstack-query'
-      preLoaderRoute: typeof DemoTanstackQueryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/books/$bookId/': {
       id: '/books/$bookId/'
       path: '/books/$bookId'
@@ -132,7 +104,6 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   BooksIndexRoute: BooksIndexRoute,
   MyListIndexRoute: MyListIndexRoute,
   BooksBookIdIndexRoute: BooksBookIdIndexRoute,

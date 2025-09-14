@@ -1,8 +1,8 @@
-import BookCard from '@/components/bookcard'
-import type { Book } from '@/lib/types'
-import { fetchBooks } from '@/services/bookService'
-import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+import { useQuery } from '@tanstack/react-query'
+import type { Book } from '@/lib/types'
+import BookCard from '@/components/bookcard'
+import { fetchBooks } from '@/services/bookService'
 
 type BookSearch = {
   genreId?: number
@@ -12,7 +12,7 @@ export const Route = createFileRoute('/books/')({
   component: RouteComponent,
   validateSearch: (search: Record<string, unknown>): BookSearch => {
     return {
-      genreId: Number(search?.page ?? 1),
+      genreId: Number(search.page ?? 1),
     }
   },
 })

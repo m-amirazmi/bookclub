@@ -1,10 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
+import { useMemo } from 'react'
 import type { Book, Genre } from '@/lib/types'
 import Hero from '@/components/home/hero'
 import { fetchBooks } from '@/services/bookService'
 import BookList from '@/components/home/booklist'
-import { useMemo } from 'react'
 
 export const Route = createFileRoute('/')({
   component: App,

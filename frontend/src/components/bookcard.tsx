@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { MinusIcon, PlusIcon } from 'lucide-react'
+import { useNavigate } from '@tanstack/react-router'
 import { Card } from './ui/card'
 import { Badge } from './ui/badge'
 import { Progress } from './ui/progress'
@@ -7,7 +8,6 @@ import { Button } from './ui/button'
 import { Skeleton } from './ui/skeleton'
 import { cn } from '@/lib/utils'
 import { useUpdateBookProgress } from '@/hooks/useUpdateBookProgress'
-import { useNavigate } from '@tanstack/react-router'
 
 type BookGenre = {
   id: string | number
@@ -27,6 +27,7 @@ type BookCardProps = {
   className?: string
   loading?: boolean
   singleGenre?: boolean
+  hideInfo?: boolean
 }
 
 export default function BookCard({
@@ -41,6 +42,7 @@ export default function BookCard({
   infoSize = 'lg',
   className,
   loading,
+  hideInfo,
   singleGenre,
 }: BookCardProps) {
   const [progress, setProgress] = useState(initialProgress ?? null)
@@ -107,6 +109,7 @@ export default function BookCard({
           className={cn(
             'absolute top-0 p-3 w-full',
             genres && genres.length ? 'flex gap-2' : 'hidden',
+            hideInfo && 'hidden',
           )}
         >
           {!singleGenre ? (
@@ -128,7 +131,7 @@ export default function BookCard({
               {genres?.[0].name}
             </Badge>
           )}
-          {!enableProgress && progress !== null && (
+          {!hideInfo && !enableProgress && progress !== null && (
             <p className="ml-auto text-primary font-bold">{progress}%</p>
           )}
           {progress === null && (
@@ -145,6 +148,7 @@ export default function BookCard({
           className={cn(
             'absolute bg-gradient-to-t from-foreground/100 to-foreground/0 w-full bottom-0',
             infoSize === 'sm' ? 'p-4' : 'px-6 py-8',
+            hideInfo && 'hidden',
           )}
         >
           <h3
