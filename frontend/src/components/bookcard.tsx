@@ -43,7 +43,7 @@ export default function BookCard({
   loading,
   singleGenre,
 }: BookCardProps) {
-  const [progress, setProgress] = useState(initialProgress ?? 0)
+  const [progress, setProgress] = useState(initialProgress ?? null)
   const { debouncedMutate } = useUpdateBookProgress(id)
   const navigate = useNavigate()
 
@@ -54,16 +54,22 @@ export default function BookCard({
   }, [initialProgress])
 
   const handleAddProgress = () => {
-    if (progress >= 100) return
+    if (progress === null || progress >= 100) return
     const newVal = progress + 5
     setProgress(newVal)
     debouncedMutate(newVal)
   }
   const handleMinusProgress = () => {
-    if (progress <= 0) return
+    if (progress === null || progress <= 0) return
     const newVal = progress - 5
     setProgress(newVal)
     debouncedMutate(newVal)
+  }
+
+  const handleAddToReadingList = () => {
+    if (progress !== null) return
+    setProgress(0)
+    debouncedMutate(0)
   }
 
   const handleBookDetail = () =>
@@ -122,8 +128,17 @@ export default function BookCard({
               {genres?.[0].name}
             </Badge>
           )}
-          {!enableProgress && (
+          {!enableProgress && progress !== null && (
             <p className="ml-auto text-primary font-bold">{progress}%</p>
+          )}
+          {progress === null && (
+            <Button
+              className="ml-auto cursor-pointer"
+              size="icon"
+              onClick={handleAddToReadingList}
+            >
+              <PlusIcon />
+            </Button>
           )}
         </div>
         <div
@@ -159,7 +174,7 @@ export default function BookCard({
                 className="rounded bg-transparent cursor-pointer"
                 variant="outline"
                 onClick={handleMinusProgress}
-                disabled={progress < 1}
+                disabled={progress !== null && progress < 1}
               >
                 <MinusIcon />
               </Button>
@@ -169,7 +184,7 @@ export default function BookCard({
                 className="rounded bg-transparent cursor-pointer"
                 variant="outline"
                 onClick={handleAddProgress}
-                disabled={progress > 99}
+                disabled={progress !== null && progress > 99}
               >
                 <PlusIcon />
               </Button>

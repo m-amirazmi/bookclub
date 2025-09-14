@@ -38,7 +38,7 @@ export default function BookList({ books, genre, loading }: BookListProps) {
       </div>
       <div className="flex flex-wrap">
         {books
-          .sort((a, b) => (b.readingProgress ?? 0) - (a.readingProgress ?? 0))
+          .sort((a, b) => (b.readingProgress ?? -1) - (a.readingProgress ?? -1))
           .slice(0, 5)
           .map((b) => (
             <div className="w-1/5 p-2">

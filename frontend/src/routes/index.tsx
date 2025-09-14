@@ -15,7 +15,6 @@ function App() {
     queryKey: ['books'],
     queryFn: fetchBooks,
   })
-  // const [genres, setGenres] = useState<Array<Genre>>()
 
   const heroBooks = books
     .filter((book) => book.readingProgress !== undefined)
